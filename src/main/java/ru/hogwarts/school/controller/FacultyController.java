@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
@@ -41,8 +40,9 @@ public class FacultyController {
     }
 
     @DeleteMapping("{id}")
-    public Faculty deleteFaculty(long id) {
-        return facultyService.deleteFaculty(id);
+    public ResponseEntity<Faculty> deleteFaculty(long id) {
+        facultyService.deleteFaculty(id);
+        return ResponseEntity.ok().build();
     }
     @GetMapping
     public Collection<Faculty> findAllFaculty() {
