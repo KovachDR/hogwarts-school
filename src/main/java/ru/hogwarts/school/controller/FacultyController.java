@@ -1,12 +1,15 @@
 package ru.hogwarts.school.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/faculty")
@@ -17,6 +20,7 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
     @GetMapping("{id}")
+    @Operation(summary = "Получение факультета по Id")
     public ResponseEntity<Faculty> getFacultyInfo(@PathVariable Long id) {
         Faculty faculty = facultyService.findFaculty(id);
         if (faculty == null) {
@@ -26,11 +30,13 @@ public class FacultyController {
     }
 
     @PostMapping
+    @Operation(summary = "Создание нового факультета")
     public Faculty createFaculty(@RequestBody Faculty faculty) {
         return facultyService.createFaculty(faculty);
     }
 
     @PutMapping
+    @Operation(summary = "Редактирование факультета")
     public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty) {
         Faculty foundFaculty = facultyService.editFaculty(faculty);
         if (foundFaculty == null) {
@@ -40,17 +46,28 @@ public class FacultyController {
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Удаление факультета по Id")
     public ResponseEntity<Faculty> deleteFaculty(long id) {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }
     @GetMapping
+    @Operation(summary = "Получить список всех факультетов")
     public Collection<Faculty> findAllFaculty() {
         return facultyService.getAllFaculty();
     }
 
     @GetMapping("/filter")
-    public Collection<Faculty> findFacultyByColor(@RequestParam String color) {
-        return facultyService.findFacultyByColor(color);
+    @Operation(summary = "Найти факультет по имени или цвету")
+    public Collection<Faculty> findFacultyByNameOrColor(@RequestParam(required = false) String name,
+                                                        @RequestParam(required = false) String color) {
+        return facultyService.findFacultyByNameOrColor(name,color);
+    }
+
+    @GetMapping("students/{facultyId}")
+    @Operation(summary = "Получить список студентов факультета")
+    public ResponseEntity<List<Student>> getStudents(@PathVariable Long facultyId) {
+        List<Student> students = facultyService.findFaculty(facultyId).getStudentList();
+        return ResponseEntity.ok(students);
     }
 }

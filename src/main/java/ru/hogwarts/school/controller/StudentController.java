@@ -1,8 +1,10 @@
 package ru.hogwarts.school.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -20,6 +22,7 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Получить студента по Id")
     public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
         Student student = studentService.findStudent(id);
         if (student == null) {
@@ -29,11 +32,13 @@ public class StudentController {
     }
 
     @PostMapping
+    @Operation(summary = "Создание нового студента")
     public Student createStudent(@RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
     @PutMapping
+    @Operation(summary = "Редактирование студента")
     public ResponseEntity<Student> editStudent(@RequestBody Student student) {
         Student foundStudent = studentService.editStudent(student);
         if (foundStudent == null) {
@@ -43,18 +48,29 @@ public class StudentController {
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Удаление студента")
     public ResponseEntity<Student> deleteStudent(long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
+    @Operation(summary = "Найти всех студентов")
     public Collection<Student> findAllStudents() {
         return studentService.getAllStudents();
     }
 
     @GetMapping("/filter")
-    public Collection<Student> findStudentsByAge(@RequestParam int age) {
-    return studentService.findStudentsByAge(age);
+    @Operation(summary = "Найти студентов в возрасте из промежутка")
+    public Collection<Student> findStudentsByAge(@RequestParam int min,
+                                                 @RequestParam int max) {
+    return studentService.findStudentsByAge(min,max);
+    }
+
+    @GetMapping("faculty/{studentId}")
+    @Operation(summary = "Получить факультет студента")
+    public ResponseEntity<Faculty> getFaculty(@PathVariable Long studentId) {
+        Faculty faculty = studentService.findStudent(studentId).getFaculty();
+        return ResponseEntity.ok(faculty);
     }
 }
