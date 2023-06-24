@@ -47,7 +47,7 @@ public class FacultyController {
 
     @DeleteMapping("{id}")
     @Operation(summary = "Удаление факультета по Id")
-    public ResponseEntity<Faculty> deleteFaculty(long id) {
+    public ResponseEntity<Faculty> deleteFaculty(Long id) {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }

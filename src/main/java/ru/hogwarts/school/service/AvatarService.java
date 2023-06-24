@@ -32,6 +32,7 @@ public class AvatarService {
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
+
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
         Student student = studentRepository.findById(studentId).get();
         Path filePath = Path.of(avatarsDir, student + "." + getExtensions(avatarFile.getOriginalFilename()));
