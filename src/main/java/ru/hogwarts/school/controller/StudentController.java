@@ -91,4 +91,10 @@ public class StudentController {
         return studentService.findLastFiveStudents();
     }
 
+    @GetMapping("/name-A")
+    @Operation(summary = "Получить студентов с именем,еачинающимся с А")
+    public Collection<Student> findStudentsWithNameByA() {
+        return studentService.findStudentsWithNameByA();
+    }
+
 }

@@ -64,4 +64,9 @@ public class StudentService {
         logger.info("Was invoked method for find last five students");
         return studentRepository.findLastFiveStudents();
     }
+
+    public Collection<Student> findStudentsWithNameByA() {
+        logger.info("Was invoked method for find students with name started A");
+        return studentRepository.findStudentsWithNameStartedA();
+    }
 }

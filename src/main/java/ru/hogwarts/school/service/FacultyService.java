@@ -50,4 +50,9 @@ public class FacultyService {
         logger.info("Was invoked method for find faculty by name or color");
         return facultyRepository.findFacultiesByNameIgnoreCaseOrColorIgnoreCase(name, color);
     }
+
+    public String longestNameFaculty() {
+        logger.info("Was invoked method for find faculty with longest name");
+        return facultyRepository.longestNameFaculty();
+    }
 }

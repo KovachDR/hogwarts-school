@@ -1,6 +1,7 @@
 package ru.hogwarts.school.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import liquibase.pro.packaged.S;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,5 +70,11 @@ public class FacultyController {
     public ResponseEntity<List<Student>> getStudents(@PathVariable Long facultyId) {
         List<Student> students = facultyService.findFaculty(facultyId).getStudentList();
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/longest-name")
+    @Operation(summary = "Получить самое длинное имя факультета")
+    public String longestNameFaculty() {
+        return facultyService.longestNameFaculty();
     }
 }
