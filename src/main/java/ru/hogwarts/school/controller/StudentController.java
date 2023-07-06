@@ -97,4 +97,16 @@ public class StudentController {
         return studentService.findStudentsWithNameByA();
     }
 
+    @GetMapping("/test-threads")
+    @Operation(summary = "Тест многопоточность")
+    public void testThreadsLesson(){
+        studentService.testThreadsLesson();
+    }
+    @GetMapping("/test-threads-2")
+    @Operation(summary = "Тест многопоточность вторая часть")
+    public void testThreadsLesson2(){
+        studentService.testThreadsLesson2();
+    }
+
+
 }

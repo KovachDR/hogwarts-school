@@ -69,4 +69,34 @@ public class StudentService {
         logger.info("Was invoked method for find students with name started A");
         return studentRepository.findStudentsWithNameStartedA();
     }
+
+    public void testThreadsLesson() {
+        System.out.println(studentRepository.findById(1L));
+        System.out.println(studentRepository.findById(2L));
+
+        new Thread(() -> {
+                System.out.println(studentRepository.findById(3L));
+                System.out.println(studentRepository.findById(4L));
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(studentRepository.findById(5L));
+            System.out.println(studentRepository.findById(6L));
+        }).start();
+    }
+
+    public synchronized void writeNameForTest(Long id1, Long id2) {
+        System.out.println(studentRepository.findById(id1));
+        System.out.println(studentRepository.findById(id2));
+    }
+
+    public void testThreadsLesson2() {
+        writeNameForTest(1L,2L);
+        new Thread(() -> {
+            writeNameForTest(3L,4L);
+        }).start();
+        new Thread(() -> {
+            writeNameForTest(5L,6L);
+        }).start();
+    }
 }
