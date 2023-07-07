@@ -10,6 +10,7 @@ import ru.hogwarts.school.service.StudentService;
 
 
 import java.util.Collection;
+import java.util.List;
 
 
 @RestController
@@ -93,8 +94,13 @@ public class StudentController {
 
     @GetMapping("/name-A")
     @Operation(summary = "Получить студентов с именем,еачинающимся с А")
-    public Collection<Student> findStudentsWithNameByA() {
+    public List<String> findStudentsWithNameByA() {
         return studentService.findStudentsWithNameByA();
     }
 
+    @GetMapping("/average-age-sttream")
+    @Operation(summary = "Получить средний возраст студентов с помощью stream")
+    public Double findAverageAgeStudentsWithStream() {
+        return studentService.findAverageAgeStudentsWithStream();
+    }
 }
