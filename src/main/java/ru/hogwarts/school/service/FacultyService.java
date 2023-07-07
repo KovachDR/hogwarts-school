@@ -1,6 +1,4 @@
 package ru.hogwarts.school.service;
-
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Comparator;
 
 @Service
 public class FacultyService {
@@ -53,6 +51,9 @@ public class FacultyService {
 
     public String longestNameFaculty() {
         logger.info("Was invoked method for find faculty with longest name");
-        return facultyRepository.longestNameFaculty();
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
     }
 }

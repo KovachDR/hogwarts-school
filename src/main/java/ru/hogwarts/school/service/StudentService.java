@@ -8,6 +8,8 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -65,38 +67,58 @@ public class StudentService {
         return studentRepository.findLastFiveStudents();
     }
 
-    public Collection<Student> findStudentsWithNameByA() {
+    public List<String> findStudentsWithNameByA() {
         logger.info("Was invoked method for find students with name started A");
-        return studentRepository.findStudentsWithNameStartedA();
+        return studentRepository.findAll().stream()
+                .filter(s -> s.getName().startsWith("A"))
+                .map(s -> s.getName().toUpperCase())
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    public void testThreadsLesson() {
-        System.out.println(studentRepository.findById(1L));
-        System.out.println(studentRepository.findById(2L));
+    public Double findAverageAgeStudentsWithStream() {
+        logger.info("Was invoked method for find average age students with stream");
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0);
+    }
 
+    public void printStudents() {
+        List<Student> students = studentRepository.findAll();
+        if (students.size() > 6) {
+            students.subList(0, 2).forEach(this::printStudentInfo);
+            printStudentsInNewThread(students.subList(2, 4));
+            printStudentsInNewThread(students.subList(4, 6));
+        }
+    }
+
+    public void printStudentsSync() {
+        List<Student> students = studentRepository.findAll();
+        if (students.size() > 6) {
+            students.subList(0, 2).forEach(this::printStudentInfo);
+            printStudentsInNewThreadSync(students.subList(2, 4));
+            printStudentsInNewThreadSync(students.subList(4, 6));
+        }
+    }
+
+
+    private void printStudentInfo(Student student) {
+        logger.info("Student, id=" + student.getId() + ", name=" + student.getName());
+    }
+    private synchronized void printStudentInfoSync(Student student) {
+        logger.info("Student, id=" + student.getId() + ", name=" + student.getName());
+    }
+
+    private void printStudentsInNewThread(List<Student> students) {
         new Thread(() -> {
-                System.out.println(studentRepository.findById(3L));
-                System.out.println(studentRepository.findById(4L));
+            students.forEach(this::printStudentInfo);
         }).start();
-
+    }
+    private void printStudentsInNewThreadSync(List<Student> students) {
         new Thread(() -> {
-            System.out.println(studentRepository.findById(5L));
-            System.out.println(studentRepository.findById(6L));
+            students.forEach(this::printStudentInfoSync);
         }).start();
     }
 
-    public synchronized void writeNameForTest(Long id1, Long id2) {
-        System.out.println(studentRepository.findById(id1));
-        System.out.println(studentRepository.findById(id2));
-    }
-
-    public void testThreadsLesson2() {
-        writeNameForTest(1L,2L);
-        new Thread(() -> {
-            writeNameForTest(3L,4L);
-        }).start();
-        new Thread(() -> {
-            writeNameForTest(5L,6L);
-        }).start();
-    }
 }

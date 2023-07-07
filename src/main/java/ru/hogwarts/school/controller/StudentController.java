@@ -10,6 +10,7 @@ import ru.hogwarts.school.service.StudentService;
 
 
 import java.util.Collection;
+import java.util.List;
 
 
 @RestController
@@ -93,20 +94,28 @@ public class StudentController {
 
     @GetMapping("/name-A")
     @Operation(summary = "Получить студентов с именем,еачинающимся с А")
-    public Collection<Student> findStudentsWithNameByA() {
+    public List<String> findStudentsWithNameByA() {
         return studentService.findStudentsWithNameByA();
     }
 
-    @GetMapping("/test-threads")
-    @Operation(summary = "Тест многопоточность")
-    public void testThreadsLesson(){
-        studentService.testThreadsLesson();
-    }
-    @GetMapping("/test-threads-2")
-    @Operation(summary = "Тест многопоточность вторая часть")
-    public void testThreadsLesson2(){
-        studentService.testThreadsLesson2();
+    @GetMapping("/average-age-sttream")
+    @Operation(summary = "Получить средний возраст студентов с помощью stream")
+    public Double findAverageAgeStudentsWithStream() {
+        return studentService.findAverageAgeStudentsWithStream();
     }
 
+    @GetMapping("/print-info-students")
+    @Operation(summary = "Вывод имен студентов(тест многопотоности)")
+    public ResponseEntity<Void> printStudents() {
+        studentService.printStudents();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/print-info-students-sync")
+    @Operation(summary = "Вывод имен студентов(тест многопотоности(синхронизированный))")
+    public ResponseEntity<Void> printStudentsSync() {
+        studentService.printStudentsSync();
+        return ResponseEntity.ok().build();
+    }
 
 }
